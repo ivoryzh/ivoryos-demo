@@ -4,6 +4,8 @@ import os
 if __name__ == "__main__":
     import ivoryos
     from ivoryos.config import DemoConfig
+    _config = DemoConfig()
+    _config.SESSION_COOKIE_SAMESITE = "Lax"
     ivoryos.run(__name__, config=DemoConfig(), blueprint_plugins=source_code, port=7860)
 
     # # USE CASE 2 - start OS using current module and enable LLM with Ollama
