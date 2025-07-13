@@ -52,4 +52,4 @@ if __name__ == "__main__":
 
     app.config["ENABLE_LLM"] = False
 
-    socketio.run(app, port=port, debug=debug, use_reloader=False)
+    socketio.run(app, host="0.0.0.0", port=port, debug=debug, use_reloader=False)
