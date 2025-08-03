@@ -1,1 +1,1 @@
-ivoryos>=1.0.8
+ivoryos>=1.2.0
