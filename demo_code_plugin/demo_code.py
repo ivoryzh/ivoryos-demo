@@ -7,12 +7,10 @@ class AbstractPump:
 
     def __init__(self, com_port: str):
         self.com_port = com_port
-        self.dictionary = {}
         self.logger = logging.getLogger("pump")
 
     def dose_liquid(self, amount_in_ml: float, rate_ml_per_minute: float = 1):
         """dose liquid"""
-        self.logger.info("dosing liquid")
         self.logger.info(f"pretending dosing {amount_in_ml} at {rate_ml_per_minute} ml/min")
         return 1
 
@@ -68,7 +66,6 @@ class AbstractSDL(ABC):
                    solid_name: str = "Acetaminophen"
                    ):
         """dose current chemical"""
-        print("dosing solid")
         self.balance.dose_solid(amount_in_mg=amount_in_mg)
         self.balance.weigh_sample()
         time.sleep(1)
@@ -80,7 +77,6 @@ class AbstractSDL(ABC):
                      amount_in_ml: float = 5,
                      rate_ml_per_minute: float = 1
                      ):
-        print("dosing liquid")
         self.logger.info(f"dosing {amount_in_ml} ml of {solvent_name} solvent at {rate_ml_per_minute} ml/min")
         time.sleep(1)
         return 1
@@ -90,7 +86,6 @@ class AbstractSDL(ABC):
                     temp: float,
                     duration: float
                     ):
-        print("equilibrate")
         self.logger.info(f"equilibrate at {temp} for {duration}")
         time.sleep(1)
 
