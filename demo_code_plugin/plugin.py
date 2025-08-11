@@ -1,7 +1,7 @@
 from flask import render_template, Blueprint, current_app
 import os
 
-source_code = Blueprint("About this demo", __name__, template_folder=os.path.join(os.path.dirname(__file__), "templates"))
+source_code = Blueprint("About", __name__, template_folder=os.path.join(os.path.dirname(__file__), "templates"))
 
 # # [main route] the route url can be anything, but "main" is needed as entry point
 @source_code.route('/')
