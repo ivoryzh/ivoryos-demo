@@ -4,7 +4,7 @@
 #
 
 app = 'ivoryos-demo'
-primary_region = 'sea'
+primary_region = 'yyz'
 
 [build]
 
@@ -19,5 +19,5 @@ primary_region = 'sea'
 [[vm]]
   memory = '1gb'
   cpu_kind = 'shared'
-  cpus = 1
+  cpus = 2
   memory_mb = 1024

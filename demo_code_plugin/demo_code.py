@@ -32,21 +32,17 @@ class AbstractBalance:
         self._value = value
 
     def weigh_sample(self):
-        time.sleep(1)
         self.logger.info(f"Weighing sample using {self.com_port}")
         return 1
 
     def dose_solid(self, amount_in_mg: float):
         """this function is used to dose solid"""
-        time.sleep(1)
         self.logger.info(f"Dosing {amount_in_mg} mg using {self.com_port}")
         return 1
 
     def _helper(self):
         """helper function will not be extracted and displayed over function panel"""
         pass
-
-
 
 
 class AbstractSDL(ABC):
@@ -57,7 +53,6 @@ class AbstractSDL(ABC):
 
     def analyze(self):
         self.logger.info("analyze")
-        time.sleep(1)
         return 1
 
 
@@ -68,7 +63,6 @@ class AbstractSDL(ABC):
         """dose current chemical"""
         self.balance.dose_solid(amount_in_mg=amount_in_mg)
         self.balance.weigh_sample()
-        time.sleep(1)
         self.logger.info(f"dosing solid {amount_in_mg} mg of {solid_name}")
         return 1
 
@@ -78,7 +72,6 @@ class AbstractSDL(ABC):
                      rate_ml_per_minute: float = 1
                      ):
         self.logger.info(f"dosing {amount_in_ml} ml of {solvent_name} solvent at {rate_ml_per_minute} ml/min")
-        time.sleep(1)
         return 1
 
 
@@ -87,7 +80,6 @@ class AbstractSDL(ABC):
                     duration: float
                     ):
         self.logger.info(f"equilibrate at {temp} for {duration}")
-        time.sleep(1)
 
     def simulate_error(self):
         raise ValueError("some error")
