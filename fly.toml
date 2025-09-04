@@ -4,7 +4,7 @@
 #
 
 app = 'ivoryos-demo'
-primary_region = 'yyz'
+primary_region = 'sea'
 
 [build]
 

@@ -1,1 +1,2 @@
-ivoryos==1.2.6a0
+ivoryos==1.3.0
+eventlet
