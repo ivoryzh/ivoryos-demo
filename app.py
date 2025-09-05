@@ -2,11 +2,12 @@ from demo_code_plugin.demo_code import pump, sdl, balance
 from demo_code_plugin.plugin import source_code
 import os
 if __name__ == "__main__":
-    import ivoryos
-    from ivoryos.config import DemoConfig
     import eventlet
 
     eventlet.monkey_patch()
+    import ivoryos
+    from ivoryos.config import DemoConfig
+
 
     _config = DemoConfig()
     _config.SESSION_COOKIE_SAMESITE = "Lax"
