@@ -5,8 +5,6 @@ from abc import ABC
 
 class AbstractSDL(ABC):
     def __init__(self):
-        # self.pump = pump
-        # self.balance = balance
         self.logger = logging.getLogger(f"logger_name")
 
     def analyze(self):
@@ -19,8 +17,6 @@ class AbstractSDL(ABC):
                    solid_name: str = "Acetaminophen"
                    ):
         """dose current chemical"""
-        # self.balance.dose_solid(amount_in_mg=amount_in_mg)
-        # self.balance.weigh_sample()
         self.logger.info(f"dosing solid {amount_in_mg} mg of {solid_name}")
         return 1
 
@@ -68,4 +64,4 @@ branin = BraninFunction()
 
 if __name__ == "__main__":
     import ivoryos
-    ivoryos.run(__name__)
+    ivoryos.run(__name__, logger="logger_name")
