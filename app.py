@@ -1,4 +1,4 @@
-from demo_code_plugin.demo_code import pump, sdl, balance
+from demo_code_plugin.demo_code import robot, branin
 from demo_code_plugin.plugin import source_code
 import os
 if __name__ == "__main__":

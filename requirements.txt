@@ -1,2 +1,2 @@
-ivoryos==1.3.8
+ivoryos[optimizer]==1.4.1
 eventlet

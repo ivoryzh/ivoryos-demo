@@ -3,50 +3,8 @@ import time
 from abc import ABC
 
 
-class AbstractPump:
-
-    def __init__(self, com_port: str):
-        self.com_port = com_port
-        self.logger = logging.getLogger("pump")
-
-    def dose_liquid(self, amount_in_ml: float, rate_ml_per_minute: float = 1):
-        """dose liquid"""
-        self.logger.info(f"pretending dosing {amount_in_ml} at {rate_ml_per_minute} ml/min")
-        return 1
-
-
-
-class AbstractBalance:
-
-    def __init__(self, com_port: str):
-        self.com_port = com_port
-        self._value = None
-        self.logger = logging.getLogger("balance")
-
-    @property
-    def setter_value(self):
-        return self._value
-
-    @setter_value.setter
-    def setter_value(self, value):
-        self._value = value
-
-    def weigh_sample(self):
-        self.logger.info(f"Weighing sample using {self.com_port}")
-        return 1
-
-    def dose_solid(self, amount_in_mg: float):
-        """this function is used to dose solid"""
-        self.logger.info(f"Dosing {amount_in_mg} mg using {self.com_port}")
-        return 1
-
-    def _helper(self):
-        """helper function will not be extracted and displayed over function panel"""
-        pass
-
-
 class AbstractSDL(ABC):
-    def __init__(self, pump: AbstractPump, balance: AbstractBalance):
+    def __init__(self):
         self.pump = pump
         self.balance = balance
         self.logger = logging.getLogger(f"logger_name")
@@ -88,13 +46,25 @@ class AbstractSDL(ABC):
         """helper function"""
         pass
 
+class BraninFunction:
+    def __init__(self):
+        self.a = 1
+        self.b = 5.1 / (4 * 3.14159 ** 2)
+        self.c = 5 / 3.14159
+        self.r = 6
+        self.s = 10
+        self.t = 1 / (8 * 3.14159)
+
+    def evaluate(self, x1: float, x2: float) -> float:
+        """Evaluate the Branin function with given parameters x1 and x2."""
+        term1 = self.a * (x2 - self.b * x1 ** 2 + self.c * x1 - self.r) ** 2
+        term2 = self.s * (1 - self.t) * np.cos(x1)
+        return term1 + term2 + self.s
 
 
 # initializing hardware
-balance = AbstractBalance("Fake com port 1")
-pump = AbstractPump("Fake com port 2")
-sdl = AbstractSDL(pump, balance)
-
+robot = AbstractSDL()
+branin = BraninFunction()
 
 if __name__ == "__main__":
     import ivoryos
