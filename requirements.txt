@@ -1,2 +1,3 @@
-ivoryos[optimizers]==1.4.1
+ivoryos[optimizers]==1.4.2
+numpy
 eventlet
