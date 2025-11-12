@@ -1,3 +1,2 @@
 ivoryos[optimizers]==1.4.2
-numpy
 eventlet
