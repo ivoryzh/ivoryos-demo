@@ -1,8 +1,16 @@
 import logging
 import time
 from abc import ABC
+from enum import Enum
 
 import numpy as np
+
+
+class Solvent(Enum):
+    Methanol = "Methanol"
+    Ethanol = "Ethanol"
+    Water = "Water"
+    Acetone = "Acetone"
 
 
 class AbstractSDL(ABC):
@@ -23,7 +31,7 @@ class AbstractSDL(ABC):
         return 1
 
     def dose_solvent(self,
-                     solvent_name: str = "Methanol",
+                     solvent_name: Solvent,
                      amount_in_ml: float = 5,
                      rate_ml_per_minute: float = 1
                      ):
