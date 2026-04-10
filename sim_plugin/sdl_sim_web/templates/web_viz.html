@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Simulation</title>
+    <link rel="stylesheet" href="{{ url_for('web_viz.static', filename='style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-container">
+
+        <header>
+            <span class="header-title">Simulation Interface</span>
+            <div id="connection-status" class="status-chip">···</div>
+        </header>
+
+        <!--
+        Grid layout (3 col × 4 row, all cells equal):
+        ┌──────────┬──────────┬──────────┐
+        │ capping  │  stir    │ analysis │  row 1
+        ├──────────┼──────────┴──────────┤
+        │  solid   │   arm (1×2)         │  row 2
+        ├──────────┼──────────┬──────────┤  (arm spans col 2-3)
+        │  liquid  │                     │  row 3
+        ├──────────┤  tray (2×2)         │  (tray spans col 2-3, row 3-4)
+        │ balance  │                     │  row 4
+        └──────────┴─────────────────────┘
+    -->
+        <main class="workbench">
+
+            <!-- Floating vial: absolutely positioned, moves between stations -->
+            <div id="float-vial" class="float-vial hidden">
+                <div class="fv-rim"></div>
+                <div class="fv-cap"></div>
+                <div class="fv-solid"></div>
+                <div class="fv-liquid"></div>
+            </div>
+
+            <div id="capping_station" class="module">
+                <span class="mod-icon">🌸</span>
+                <span class="mod-label" id="capping-val">Cap</span>
+            </div>
+
+            <div id="stir_plate" class="module">
+                <span class="mod-icon" id="stir-icon">🌀</span>
+                <span class="mod-label">Stir</span>
+            </div>
+
+            <div id="analysis_station" class="module">
+                <span class="mod-icon">🔬</span>
+                <span class="mod-label" id="analysis-val">Analyze</span>
+            </div>
+
+            <div id="solid_addition_station" class="module">
+                <span class="mod-icon">🧊</span>
+                <span class="mod-label">Solid</span>
+            </div>
+
+            <!-- Arm: spans col 2-3 on row 2 -->
+            <div class="module arm-module" id="arm-module">
+                <div class="arm-orb" id="arm-orb"></div>
+                <span class="mod-label" id="arm-label">Arm · Idle</span>
+            </div>
+
+            <div id="liquid_addition_station" class="module">
+                <span class="mod-icon">💧</span>
+                <span class="mod-label">Liquid</span>
+            </div>
+
+            <!-- Tray: spans col 2-3 on rows 3-4 (2×2) -->
+            <div class="tray-module" id="tray-module">
+                <div class="tray-header">
+                    <span class="tray-title">Sample Tray</span>
+                    <span class="tray-active" id="tray-active"></span>
+                </div>
+                <div class="tray-grid" id="tray-grid">
+                    <!-- 15 slots built by JS -->
+                </div>
+            </div>
+
+            <div id="weigh_balance" class="module">
+                <span class="mod-icon">⚖️</span>
+                <span class="mod-label" id="weigh-val">Balance</span>
+            </div>
+
+        </main>
+
+        <aside class="log-panel">
+            <ul id="log-list"></ul>
+        </aside>
+
+    </div>
+    <script src="{{ url_for('web_viz.static', filename='script.js') }}"></script>
+</body>
+
+</html>

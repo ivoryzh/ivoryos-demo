@@ -1,0 +1,422 @@
+/* ── Variables ─────────────────────────────────────────── */
+:root {
+    --bg:           #f1f5f9;
+    --surface:      #ffffff;
+    --border:       rgba(0,0,0,0.09);
+    --text:         #1e293b;
+    --muted:        #64748b;
+    --accent:       #3b82f6;
+    --accent-bg:    rgba(59,130,246,0.10);
+    --active-bg:    rgba(234,179,8,0.15);
+    --active-bd:    rgba(234,179,8,0.50);
+    --done-bg:      rgba(59,130,246,0.08);
+    --done-bd:      rgba(59,130,246,0.22);
+    --solid-clr:    #f59e0b;
+    --liquid-clr:   rgba(124, 58, 237, 0.72);
+    --cap-clr:      #475569;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ── Shell ─────────────────────────────────────────────── */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* ── Header ────────────────────────────────────────────── */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 8px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    height: 26px;
+}
+.header-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+}
+.status-chip {
+    padding: 1px 6px;
+    border-radius: 10px;
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+    background: rgba(239,68,68,0.12);
+    border: 1px solid rgba(239,68,68,0.35);
+    color: #dc2626;
+    transition: all 0.3s;
+}
+.status-chip.connected {
+    background: rgba(34,197,94,0.12);
+    border-color: rgba(34,197,94,0.35);
+    color: #16a34a;
+}
+
+/* ── Workbench: 3-col × 4-row, all cells equal ─────────── */
+main.workbench {
+    display: grid;
+    position: relative;   /* anchor for float-vial */
+    grid-template-areas:
+        "cap   stir  ana"
+        "solid arm   arm"
+        "liq   tray  tray"
+        "bal   tray  tray";
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    gap: 4px;
+    padding: 5px;
+    flex: 1;
+    min-height: 0;
+}
+
+/* ── Grid area assignments ─────────────────────────────── */
+#capping_station          { grid-area: cap; }
+#stir_plate               { grid-area: stir; }
+#analysis_station         { grid-area: ana; }
+#solid_addition_station   { grid-area: solid; }
+.arm-module               { grid-area: arm; }
+#liquid_addition_station  { grid-area: liq; }
+.tray-module              { grid-area: tray; }
+#weigh_balance            { grid-area: bal; }
+
+/* ── Base module tile ──────────────────────────── */
+.module {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;  /* content at top so vial lands below */
+    gap: 2px;
+    padding: 6px 4px 4px;
+    overflow: hidden;
+    transition: background 0.2s, box-shadow 0.2s;
+    cursor: default;
+    min-height: 0;
+    min-width: 0;
+}
+.module.active {
+    background: var(--accent-bg);
+    box-shadow: 0 0 8px rgba(59,130,246,0.28);
+}
+@keyframes flashMod {
+    0%,100% { background: var(--surface); }
+    50%      { background: rgba(234,179,8,0.22); box-shadow: 0 0 7px rgba(234,179,8,0.4); }
+}
+.module.flash { animation: flashMod 0.5s ease; }
+
+.mod-icon {
+    font-size: 1.3rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+.mod-label {
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.3;
+    word-break: break-word;
+    max-width: 100%;
+}
+
+/* Stir animation */
+@keyframes spin { 100% { transform: rotate(360deg); } }
+.spin-active { animation: spin 0.9s linear infinite; display: inline-block; }
+
+/* ── Arm module ────────────────────────────────── */
+.arm-module {
+    /* Label at top, orb pinned to bottom — text changes won't shift orb */
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 6px 4px 6px;
+    gap: 0;
+    background: var(--surface);
+}
+.arm-module .mod-label {
+    flex-shrink: 0;
+    margin-bottom: auto;   /* pushes orb down */
+}
+.arm {
+    display: flex;
+    align-items: flex-end;     /* orb sits at bottom */
+    justify-content: center;
+    width: 100%;
+    flex: 1;
+    padding-bottom: 2px;
+}
+.arm-orb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 38% 35%, #94a3b8, #1e293b);
+    border: 1.5px solid #64748b;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+    flex-shrink: 0;
+    transition: box-shadow 0.3s;
+}
+.arm-orb.busy {
+    box-shadow: 0 0 10px rgba(59,130,246,0.7), 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* ── Tray module ────────────────────────────────────────── */
+.tray-module {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    gap: 4px;
+    min-height: 0;
+    min-width: 0;
+    overflow: hidden;
+}
+.tray-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-shrink: 0;
+}
+.tray-title {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+.tray-active {
+    font-size: 0.66rem;
+    color: #d97706;
+    font-weight: 600;
+}
+
+/* ── 5×3 vial grid ──────────────────────────────────────── */
+.tray-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 3px;
+    flex: 1;
+    min-height: 0;
+}
+
+/* ── Individual vial slot ───────────────────────────────── */
+.vial-slot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 2px 1px;
+    gap: 1px;
+    border-radius: 4px;
+    border: 1px dashed var(--border);
+    background: #f8fafc;
+    min-height: 0;
+    overflow: hidden;
+    transition: background 0.2s, border-color 0.2s;
+}
+.vial-slot.slot-done {
+    background: var(--done-bg);
+    border: 1px solid var(--done-bd);
+}
+.vial-slot.slot-active {
+    background: var(--active-bg);
+    border: 1px solid var(--active-bd);
+}
+@keyframes pulseSlot {
+    0%,100% { box-shadow: none; }
+    50%      { box-shadow: 0 0 5px rgba(234,179,8,0.55); }
+}
+.vial-slot.slot-active { animation: pulseSlot 1.1s ease infinite; }
+
+/* ── Mini vial ──────────────────────────────────────────── */
+.slot-vial {
+    /* size: fills most of the slot vertically */
+    width: 14px;
+    flex: 1;
+    max-height: 38px;
+    min-height: 18px;
+
+    position: relative;
+    border: 1.5px solid rgba(0,0,0,0.17);
+    border-top: none;
+    border-radius: 0 0 5px 5px;
+    background: rgba(224,232,255,0.45); /* glass tint */
+    overflow: hidden;
+    transition: opacity 0.3s;
+}
+.slot-vial.away { opacity: 0.18; }
+
+/* Cap sits ABOVE the vial opening */
+.v-cap {
+    position: absolute;
+    top: -8px;
+    left: -2px; right: -2px;
+    height: 10px;
+    background: var(--cap-clr);
+    border-radius: 3px 3px 0 0;
+    border: 1px solid #334155;
+    border-bottom: none;
+    transition: opacity 0.4s, transform 0.4s cubic-bezier(0.68,-0.55,0.265,1.55);
+    z-index: 3;
+}
+.slot-vial.uncapped .v-cap {
+    opacity: 0;
+    transform: translateY(-14px) scale(0.4);
+}
+
+/* Visible opening rim at vial mouth */
+.v-rim {
+    position: absolute;
+    top: 0; left: -1px; right: -1px;
+    height: 4px;
+    border: 1.5px solid rgba(0,0,0,0.22);
+    border-bottom: none;
+    border-radius: 2px 2px 0 0;
+    background: rgba(180,200,255,0.25);
+    z-index: 4;   /* above fills, below cap */
+}
+
+/* Solid powder (bottom) — hatched texture reads as granular material */
+.v-solid {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 0%;
+    background: repeating-linear-gradient(
+        -45deg,
+        #f59e0b,
+        #f59e0b 2px,
+        #fde68a 2px,
+        #fde68a 4px
+    );
+    transition: height 0.6s ease;
+    z-index: 1;
+}
+
+/* Liquid (above solid) */
+.v-liquid {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 0%;
+    background: var(--liquid-clr);
+    transition: height 0.6s ease, bottom 0.6s ease;
+    z-index: 2;
+}
+
+/* Slot number */
+.slot-num {
+    font-size: 0.6rem;
+    color: var(--muted);
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+/* ── Floating vial (moves between stations) ──────────────── */
+.float-vial {
+    position: absolute;
+    z-index: 200;
+    width: 20px;
+    height: 38px;
+    border: 2px solid rgba(0,0,0,0.22);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    background: rgba(210,225,255,0.55);
+    overflow: hidden;
+    pointer-events: none;
+    /* Centered on left/top coordinates */
+    transform: translate(-50%, -50%);
+    transition: left 0.75s cubic-bezier(0.4,0,0.2,1),
+                top  0.75s cubic-bezier(0.4,0,0.2,1),
+                opacity 0.3s;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.18);
+}
+.float-vial.hidden { display: none; }
+
+/* Float vial rim */
+.fv-rim {
+    position: absolute;
+    top: 0; left: -1px; right: -1px;
+    height: 4px;
+    border: 1.5px solid rgba(0,0,0,0.25);
+    border-bottom: none;
+    border-radius: 2px 2px 0 0;
+    background: rgba(180,200,255,0.3);
+    z-index: 4;
+}
+/* Float vial cap */
+.fv-cap {
+    position: absolute;
+    top: -11px; left: -3px; right: -3px;
+    height: 14px;
+    background: var(--cap-clr);
+    border-radius: 4px 4px 0 0;
+    border: 1.5px solid #334155;
+    border-bottom: none;
+    transition: opacity 0.4s, transform 0.4s cubic-bezier(0.68,-0.55,0.265,1.55);
+    z-index: 3;
+}
+.float-vial.uncapped .fv-cap {
+    opacity: 0;
+    transform: translateY(-18px) scale(0.35);
+}
+/* Float vial solid fill */
+.fv-solid {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 0%;
+    background: repeating-linear-gradient(
+        -45deg,
+        #f59e0b,
+        #f59e0b 2px,
+        #fde68a 2px,
+        #fde68a 4px
+    );
+    transition: height 0.6s ease;
+}
+/* Float vial liquid fill */
+.fv-liquid {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 0%;
+    background: var(--liquid-clr);
+    transition: height 0.6s ease, bottom 0.6s ease;
+    z-index: 1;
+}
+
+/* ── Activity log (bottom strip) ─────────────────────────── */
+.log-panel {
+    flex-shrink: 0;
+    height: 110px;
+    border-top: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 4px 8px;
+    background: var(--surface);
+}
+#log-list { list-style: none; }
+#log-list li {
+    font-size: 0.78rem;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    padding: 2px 0;
+    animation: fadeIn 0.2s ease;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-2px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
