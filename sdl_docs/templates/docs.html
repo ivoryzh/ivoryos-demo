@@ -1,0 +1,133 @@
+{% if base_exists %}
+    {% extends 'base.html' %}
+    {% block title %}SDL Simulation Tutorial{% endblock %}
+{% else %}
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>SDL Simulation Tutorial</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+        <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    </head>
+    <body style="margin: 0; padding: 0;">
+{% endif %}
+
+{% block body %}
+<style>
+    .edu-container {
+        font-family: 'Nunito', sans-serif;
+        background: #f5f7fa;
+        min-height: 100vh;
+        padding: 20px 0;
+    }
+    .fun-header {
+        font-family: 'Fredoka', sans-serif;
+        color: #ff6b6b;
+        text-align: center;
+        margin-bottom: 15px;
+        font-size: 2.5rem;
+    }
+    .card-custom {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        border: none;
+        overflow: hidden;
+    }
+    h2 {
+        font-family: 'Fredoka', sans-serif;
+        color: #4ecdc4;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        font-size: 1.6rem;
+    }
+    .badge-fun {
+        background-color: #ffe66d;
+        color: #2b2d42;
+        font-size: 1.1rem;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-family: 'Fredoka', sans-serif;
+        display: inline-block;
+    }
+    .author-section {
+        background: #f8f9fa;
+        border-left: 4px solid #ff6b6b;
+        padding: 15px;
+        border-radius: 0 10px 10px 0;
+    }
+    .list-group-item {
+        border: none;
+        padding: 8px 0;
+        font-size: 1.05rem;
+    }
+    .icon-list {
+        margin-right: 8px;
+        font-size: 1.1rem;
+    }
+</style>
+
+<div class="edu-container">
+    <div class="container">
+        <h1 class="fun-header"><i class="bi bi-robot"></i> SDL Simulation Interface</h1>
+
+        <div class="card-custom">
+            <div class="card-body p-4">
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h2><i class="bi bi-bounding-box-circles"></i> What is a Self-Driving Lab?</h2>
+                        <p>A <strong>Self-Driving Lab (SDL)</strong> automates scientific experiments by orchestrating various robotic instruments to perform tasks autonomously. The simulated instruments in this package are highly <strong>modular and essential</strong> to the core philosophy of an SDL. By keeping hardware components modular, developers can seamlessly swap, scale, or upgrade instruments without breaking the global orchestration logic.</p>
+
+                        <div class="mt-3 p-3 border rounded" style="background-color: #f8fbfa;">
+                            <h5 style="color: #4ecdc4; font-family: 'Fredoka';">Simulated Instruments Explained:</h5>
+                            <ul class="list-group list-group-flush mt-2" style="background: transparent;">
+                                <li class="list-group-item" style="background: transparent;">
+                                    <i class="bi bi-check-circle-fill text-success icon-list"></i>
+                                    <strong>Robotic Arm:</strong> The core physical transporter. It safely grips and transfers sample vials between the different automated stations.
+                                </li>
+                                <li class="list-group-item" style="background: transparent;">
+                                    <i class="bi bi-check-circle-fill text-success icon-list"></i>
+                                    <strong>Weigh Balance & Stir Plate:</strong> Precisely records the mass of added reagents and continuously mixes components to ensure homogeneous reactions.
+                                </li>
+                                <li class="list-group-item" style="background: transparent;">
+                                    <i class="bi bi-check-circle-fill text-success icon-list"></i>
+                                    <strong>Capping Station:</strong> Automatically handles capping and uncapping of vials before additions or heating, preventing spills or evaporation.
+                                </li>
+                                <li class="list-group-item" style="background: transparent;">
+                                    <i class="bi bi-check-circle-fill text-success icon-list"></i>
+                                    <strong>Solid & Liquid Addition:</strong> Dispenses highly precise amounts of powder or liquid reagents directly into the unsealed reaction vessel.
+                                </li>
+                                <li class="list-group-item" style="background: transparent;">
+                                    <i class="bi bi-check-circle-fill text-success icon-list"></i>
+                                    <strong>Sample Analysis:</strong> The final evaluation step. Extracts aliquots to run programmatic checks or measurements on the success of the automated setup.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="my-4" style="opacity: 0.15; border-top: 2px solid #2b2d42;">
+
+                <div class="author-section d-flex align-items-center">
+                    <div class="me-3 fs-2">
+                        <i class="bi bi-people-fill" style="color: #ff6b6b;"></i>
+                    </div>
+                    <div>
+                        <h5 style="font-family: 'Fredoka', sans-serif; margin-bottom: 2px;">Authors</h5>
+                        <p class="mb-0" style="font-size: 0.95rem;"><strong>Veronica Lai</strong> - Initial Creation | <strong>Ivory Zhang</strong> - Modifications and Extensions</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if not base_exists %}
+    </body>
+    </html>
+{% endif %}
+{% endblock %}

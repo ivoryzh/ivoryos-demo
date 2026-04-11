@@ -33,6 +33,26 @@ _vial_contents: dict = {
 }
 
 
+def reset_state():
+    """Resets all simulation globals back to defaults."""
+    global _vial_location, _is_held_by_arm, _cap_is_on, _current_vial_number
+    global _vial_contents, _dummy_vial_weight_mg, _solid_added_mg, _liquid_added_ml
+
+    _vial_location = 'tray'
+    _is_held_by_arm = False
+    _cap_is_on = True
+    _current_vial_number = None
+
+    _vial_contents = {
+        i: {"solid_mg": 0.0, "liquid_ml": 0.0, "cap_is_on": True, "processed": False}
+        for i in range(1, 16)
+    }
+
+    _dummy_vial_weight_mg = DEFAULT_VIAL_WEIGHT_MG
+    _solid_added_mg = 0.0
+    _liquid_added_ml = 0.0
+
+
 # ----------------------------------------------------------------------------------------
 class RoboticArm:
     """

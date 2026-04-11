@@ -6,7 +6,8 @@ import instruments
 from sim_plugin.sdl_sim_web.plugin import web_viz_bp, process_event
 from instruments import (
     RoboticArm, WeighBalance, StirPlate, CappingStation,
-    SolidAdditionStation, LiquidAdditionStation, SampleAnalysisStation
+    SolidAdditionStation, LiquidAdditionStation, SampleAnalysisStation,
+    reset_state
 )
 
 def trigger_event(instrument_name, method_name, *args, **kwargs):
@@ -22,12 +23,13 @@ def trigger_event(instrument_name, method_name, *args, **kwargs):
         import traceback
         traceback.print_exc()
 
+
 class SimRoboticArm(RoboticArm):
     def pick_up_vial_from_tray(self, vial_number):
         if not instruments._is_held_by_arm and instruments._vial_location == 'tray':
             trigger_event("robotic_arm", "pick_up_vial_from_tray", vial_number)
         super().pick_up_vial_from_tray(vial_number)
-        
+
     def place_vial_in_tray(self, vial_number):
         if instruments._is_held_by_arm:
             trigger_event("robotic_arm", "place_vial_in_tray", vial_number)
@@ -93,10 +95,12 @@ class SimRoboticArm(RoboticArm):
             trigger_event("robotic_arm", "place_vial_in_analysis_station")
         super().place_vial_in_analysis_station()
 
+
 class SimWeighBalance(WeighBalance):
     def zero(self):
         trigger_event("weigh_balance", "zero")
         super().zero()
+
     def get_weight_mg(self):
         val = super().get_weight_mg()
         trigger_event("weigh_balance", "get_weight_mg", val)
@@ -106,6 +110,7 @@ class SimStirPlate(StirPlate):
     def start_stirring(self):
         trigger_event("stir_plate", "start_stirring")
         super().start_stirring()
+
     def stop_stirring(self):
         trigger_event("stir_plate", "stop_stirring")
         super().stop_stirring()
@@ -151,15 +156,20 @@ sample_analysis_station = SimSampleAnalysisStation()
 # Copy logging enabling function
 import sys
 import logging
+
+
 def enable_logging_to_console():
     stream_handler = logging.StreamHandler(sys.stdout)
-    instruments = [robotic_arm, weigh_balance, stir_plate, capping_station, 
+    instruments = [robotic_arm, weigh_balance, stir_plate, capping_station,
                    solid_addition_station, liquid_addition_station, sample_analysis_station]
     for inst in instruments:
         inst.logger.addHandler(stream_handler)
         inst.logger.setLevel(logging.INFO)
 
+
 last_synced_state = None
+
+
 def state_monitor():
     global last_synced_state
     while True:
@@ -179,9 +189,15 @@ def state_monitor():
             trigger_event("system", "sync_state", current_state)
         time.sleep(0.1)
 
+
+def _on_ui_reset():
+    global last_synced_state
+    reset_state()
+    # Force a sync event on the next monitor loop by clearing cache
+    last_synced_state = None
+
+
+web_viz_bp.on_reset_requested = _on_ui_reset
+
 _monitor_thread = threading.Thread(target=state_monitor, daemon=True)
 _monitor_thread.start()
-
-if __name__ == "__main__":
-    import ivoryos
-    ivoryos.run(__name__, blueprint_plugins=[web_viz_bp])

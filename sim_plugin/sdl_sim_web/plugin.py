@@ -4,6 +4,7 @@ from flask_socketio import emit
 web_viz_bp = Blueprint('web_viz', __name__, template_folder='templates', static_folder='static')
 web_viz_bp.plugin_type = "left_panel"
 web_viz_bp.last_known_state = {"vial_location": "tray", "is_held_by_arm": False}
+web_viz_bp.on_reset_requested = None
 
 _socketio = None
 
@@ -15,6 +16,13 @@ def init_socketio(socketio):
     def handle_request_sync_state():
         print("Client requested sync_state, emitting state: ", web_viz_bp.last_known_state)
         emit('sync_state', web_viz_bp.last_known_state)
+
+    @_socketio.on('reset_state')
+    def handle_reset_state():
+        print("Client requested state reset.")
+        if callable(web_viz_bp.on_reset_requested):
+            web_viz_bp.on_reset_requested()
+
 
 web_viz_bp.init_socketio = init_socketio
 

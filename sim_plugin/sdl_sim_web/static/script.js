@@ -10,6 +10,11 @@ const trayActive = document.getElementById('tray-active');
 const floatVial  = document.getElementById('float-vial');
 const fvSolid    = floatVial.querySelector('.fv-solid');
 const fvLiquid   = floatVial.querySelector('.fv-liquid');
+const btnReset   = document.getElementById('btn-reset');
+
+btnReset.addEventListener('click', () => {
+    socket.emit('reset_state');
+});
 
 // ── Build 15-slot tray (5 cols × 3 rows) ───────────────────
 const grid = document.getElementById('tray-grid');
@@ -166,17 +171,15 @@ socket.on('sync_state', (state) => {
         const info      = vial_contents[String(i)] || {};
         const processed = !!info.processed;
 
-        // While the active vial is held, show its live values
-        const solidMg  = isActive && is_held_by_arm ? solid_added  : (info.solid_mg  || 0);
-        const liquidMl = isActive && is_held_by_arm ? liquid_added : (info.liquid_ml || 0);
-        const capOn    = isActive && is_held_by_arm
-            ? cap_is_on
-            : (processed ? info.cap_is_on : true);
+        // The tray slot should permanently reflect the saved state; it updates only when the vial is placed back
+        const solidMg  = info.solid_mg  || 0;
+        const liquidMl = info.liquid_ml || 0;
+        const capOn    = processed ? info.cap_is_on : true;
 
         slotEl.classList.toggle('slot-active', isActive);
         slotEl.classList.toggle('slot-done',   processed && !isActive);
         // Ghost the tray mini-vial when it's being held by arm
-        vialEl.classList.toggle('away',     isActive && !!is_held_by_arm);
+        vialEl.classList.toggle('away',     isActive && (!!is_held_by_arm || vial_location !== 'tray'));
         vialEl.classList.toggle('uncapped', !capOn);
 
         const solidPct  = solidMg  > 0 ? Math.max(8, Math.min(68, solidMg  / 10)) : 0;
