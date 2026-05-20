@@ -1,1 +1,1 @@
-ivoryos==1.5.18
+ivoryos==1.6.0
