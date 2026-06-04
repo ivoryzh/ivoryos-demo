@@ -1,7 +1,28 @@
-from sim_instruments import *
-from sim_plugin.sdl_sim_web.plugin import web_viz_bp
 from sdl_docs.plugin import docs_bp
-import os
+
+from scripts.sim_instruments import SimWeighBalance
+from scripts.sim_instruments import SimRoboticArm
+from scripts.sim_instruments import SimStirPlate
+from scripts.sim_instruments import SimSolidAdditionStation
+from scripts.sim_instruments import SimSampleAnalysisStation
+from scripts.sim_instruments import SimCappingStation
+from scripts.sim_instruments import SimLiquidAdditionStation
+from sdl_sim_web.plugin import web_viz_bp
+import ivoryos
+
+# Initialize hardware
+try:
+    weigh_balance = SimWeighBalance()
+    robotic_arm = SimRoboticArm()
+    stir_plate = SimStirPlate()
+    solid_addition_station = SimSolidAdditionStation()
+    sample_analysis_station = SimSampleAnalysisStation()
+    capping_station = SimCappingStation()
+    liquid_addition_station = SimLiquidAdditionStation()
+except Exception as e:
+    print(f"Failed to initialize hardware: {e}. Connect them in the web interface or try again.")
+
+# Start IvoryOS web interface
 if __name__ == "__main__":
     import ivoryos
     from ivoryos.config import DemoConfig
