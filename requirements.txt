@@ -1,2 +1,2 @@
 ivoryos==1.6.4
-colour-match-sdl==0.1.1
+colour-match-sdl==0.1.2
