@@ -1,0 +1,78 @@
+{
+  "deck": "app",
+  "name": "analyze_vial",
+  "uuid": null,
+  "author": "demo_695d1e14",
+  "status": "editing",
+  "id_order": {
+    "prep": [],
+    "script": [],
+    "cleanup": []
+  },
+  "registered": false,
+  "description": "",
+  "script_dict": {
+    "prep": [],
+    "script": [
+      {
+        "id": 1,
+        "args": {
+          "vial_number": "#vial_number"
+        },
+        "uuid": 296882520134813,
+        "action": "pick_up_vial_from_tray",
+        "return": "",
+        "arg_types": {
+          "vial_number": "int"
+        },
+        "instrument": "deck.robotic_arm"
+      },
+      {
+        "id": 2,
+        "args": {},
+        "uuid": 289298794815663,
+        "action": "place_vial_in_analysis_station",
+        "return": "",
+        "arg_types": {},
+        "instrument": "deck.robotic_arm"
+      },
+      {
+        "id": 3,
+        "args": {},
+        "uuid": 311964956457612,
+        "action": "analyze",
+        "return": "analysis_signal",
+        "arg_types": {},
+        "instrument": "deck.sample_analysis_station"
+      },
+      {
+        "id": 4,
+        "args": {},
+        "uuid": 281776359397147,
+        "action": "pick_up_vial_in_analysis_station",
+        "return": "",
+        "arg_types": {},
+        "instrument": "deck.robotic_arm"
+      },
+      {
+        "id": 5,
+        "args": {
+          "vial_number": "#vial_number"
+        },
+        "uuid": 246547201846282,
+        "action": "place_vial_in_tray",
+        "return": "",
+        "arg_types": {
+          "vial_number": "int"
+        },
+        "instrument": "deck.robotic_arm"
+      }
+    ],
+    "cleanup": []
+  },
+  "editing_type": "script",
+  "time_created": "2026-04-22 00:32:48",
+  "last_modified": "2026-04-22 00:32:48",
+  "python_script": null,
+  "return_values": []
+}
